@@ -1,0 +1,6 @@
+dataset: SynthSetLPS
+model: Conv6XL
+optimizer:
+  name: Adam
+  lr: 1.0e-3
+batchsize: 512

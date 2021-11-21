@@ -1,0 +1,19 @@
+dataset: SynthSetWithClassify
+model: Conv6XL
+optimizer:
+  name: Adam
+  lr: 1.0e-3
+batchsize: 512
+criterion:
+  y_args: mse
+  y_kind: ce
+loss_weight:
+  y_args: 1.0
+  y_kind: 10.0
+metrics:
+  y_args:
+    - rmse
+    - lcl
+    - mae
+  y_kind:
+    - ce

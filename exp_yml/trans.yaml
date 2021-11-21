@@ -1,0 +1,6 @@
+dataset: SynthSetLPS
+model: Trans
+optimizer:
+  name: Adam
+  lr: 1.0e-4
+batchsize: 256
