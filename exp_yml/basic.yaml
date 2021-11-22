@@ -1,5 +1,5 @@
-dataset: SynthSetWithClassify
-model: Conv6XL
+dataset: SynthSetClassify
+model: ConvComp
 optimizer:
   name: Adam
   lr: 1.0e-3
@@ -9,7 +9,7 @@ criterion:
   y_kind: ce
 loss_weight:
   y_args: 1.0
-  y_kind: 10.0
+  y_kind: 1.0
 metrics:
   y_args:
     - rmse
