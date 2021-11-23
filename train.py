@@ -3,7 +3,7 @@ import argparse
 
 import torch
 from ignite.engine import Engine, Events, create_supervised_trainer, create_supervised_evaluator
-from ignite.handlers import Checkpoint, DiskSaver, EarlyStopping
+from ignite.handlers import Checkpoint, DiskSaver, EarlyStopping, global_step_from_engine
 from ignite.metrics import Loss
 from torch.utils.data import DataLoader
 from torch.utils.tensorboard import SummaryWriter
@@ -133,6 +133,17 @@ if __name__ == '__main__':
     evaluator.add_event_handler(
         Events.COMPLETED,
         EarlyStopping(10, lambda engine: -engine.state.metrics['criterion'], trainer)
+    )
+    evaluator.add_event_handler(
+        Events.COMPLETED,
+        Checkpoint({
+            'model': model
+        },
+            DiskSaver(conf.checkpoint_dir, create_dir=True, require_empty=False),
+            filename_prefix='best',
+            score_name='criterion',
+            n_saved=2,
+            global_step_transform=global_step_from_engine(trainer))
     )
 
     trainer.run(loader_train, max_epochs=500)
