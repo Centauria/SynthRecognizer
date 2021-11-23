@@ -1,5 +1,5 @@
 dataset: SynthSetClassify
-model: ConvE2E
+model: E2E_ConvPretrained
 optimizer:
   name: Adam
   lr: 1.0e-3
@@ -18,4 +18,4 @@ metrics:
   y_kind:
     - ce
 pretrained_model:
-  conv_2d: checkpoints/multi-ConvComp/best_model.pt
+  conv_2d: checkpoints/multi-ConvComp/best_model_1_criterion=0.3063.pt
