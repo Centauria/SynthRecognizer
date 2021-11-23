@@ -1,4 +1,4 @@
-dataset: SynthSetClassify
+dataset: SynthSetLPSClassify
 model: ConvComp
 optimizer:
   name: Adam
