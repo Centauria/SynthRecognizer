@@ -3,7 +3,7 @@ import argparse
 
 import torch
 from ignite.engine import Engine, Events, create_supervised_trainer, create_supervised_evaluator
-from ignite.handlers import Checkpoint, DiskSaver, EarlyStopping, global_step_from_engine
+from ignite.handlers import Checkpoint, DiskSaver, EarlyStopping
 from ignite.metrics import Loss
 from torch.utils.data import DataLoader
 from torch.utils.tensorboard import SummaryWriter
@@ -142,8 +142,8 @@ if __name__ == '__main__':
             DiskSaver(conf.checkpoint_dir, create_dir=True, require_empty=False),
             filename_prefix='best',
             score_name='criterion',
-            n_saved=2,
-            global_step_transform=global_step_from_engine(trainer))
+            n_saved=1,
+            global_step_transform=lambda *_: trainer.state.epoch)
     )
 
     trainer.run(loader_train, max_epochs=500)
