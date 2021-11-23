@@ -1,0 +1,21 @@
+dataset: SynthSetClassify
+model: ConvE2E
+optimizer:
+  name: Adam
+  lr: 1.0e-3
+batchsize: 512
+criterion:
+  y_args: mse
+  y_kind: ce
+loss_weight:
+  y_args: 1.0
+  y_kind: 1.0
+metrics:
+  y_args:
+    - rmse
+    - lcl
+    - mae
+  y_kind:
+    - ce
+pretrained_model:
+  conv_2d: checkpoints/multi-ConvComp/best_model.pt
