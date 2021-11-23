@@ -125,7 +125,10 @@ if __name__ == '__main__':
             'model': model,
             'optimizer': optimizer,
             'lr_scheduler': lr_scheduler
-        }, DiskSaver(conf.checkpoint_dir, create_dir=True, require_empty=False))
+        },
+            DiskSaver(conf.checkpoint_dir, create_dir=True, require_empty=False),
+            n_saved=20,
+            global_step_transform=lambda *_: trainer.state.epoch)
     )
     evaluator.add_event_handler(
         Events.COMPLETED,
