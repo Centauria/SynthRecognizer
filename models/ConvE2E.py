@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import torch.nn as nn
 
-import models.Conv6XL
+import models.ConvComp
 
 
 class ConvE2E(nn.Module):
@@ -17,11 +17,11 @@ class ConvE2E(nn.Module):
             nn.Conv1d(128, 257, (8,), (4,)),
             nn.ReLU(),
         )
-        self.conv_2d = models.Conv6XL.model
+        self.conv_2d = models.ConvComp.model
 
     def forward(self, x):
         x = self.conv_1d(x)
-        x = x[:, :, :64].transpose(1, 2).unsqueeze(1)
+        x = x.transpose(1, 2).unsqueeze(1)
         x = self.conv_2d(x)
         return x
 
