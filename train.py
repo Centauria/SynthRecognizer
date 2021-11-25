@@ -141,7 +141,7 @@ if __name__ == '__main__':
         },
             DiskSaver(conf.checkpoint_dir, create_dir=True, require_empty=False),
             filename_prefix='best',
-            score_name='criterion',
+            score_function=lambda engine: -engine.state.metrics['criterion'],
             n_saved=1,
             global_step_transform=lambda *_: trainer.state.epoch)
     )
