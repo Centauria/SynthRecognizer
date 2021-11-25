@@ -1,5 +1,5 @@
 dataset: SynthSetClassify
-model: E2E_ConvPretrained
+model: E2E_ConvPTrainable
 optimizer:
   name: Adam
   lr: 1.0e-3
