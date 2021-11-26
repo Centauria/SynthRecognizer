@@ -62,7 +62,11 @@ if __name__ == '__main__':
 
     val_metrics = config.get_metrics(conf)
     val_metrics['criterion'] = Loss(criterion)
-    evaluator = create_supervised_evaluator(
+    evaluator_train = create_supervised_evaluator(
+        model, metrics=val_metrics, device=device,
+        output_transform=lambda x, y, y_pred: (y_pred, y)
+    )
+    evaluator_val = create_supervised_evaluator(
         model, metrics=val_metrics, device=device,
         output_transform=lambda x, y, y_pred: (y_pred, y)
     )
@@ -83,8 +87,8 @@ if __name__ == '__main__':
 
     @trainer.on(Events.EPOCH_COMPLETED)
     def log_training_results(e: Engine):
-        evaluator.run(loader_train)
-        metrics = evaluator.state.metrics
+        evaluator_train.run(loader_train)
+        metrics = evaluator_train.state.metrics
         print(
             f"Training Results - "
             f"Epoch: {e.state.epoch}  "
@@ -99,8 +103,8 @@ if __name__ == '__main__':
 
     @trainer.on(Events.EPOCH_COMPLETED)
     def log_validation_results(e: Engine):
-        evaluator.run(loader_eval)
-        metrics = evaluator.state.metrics
+        evaluator_val.run(loader_eval)
+        metrics = evaluator_val.state.metrics
         print(
             f"Validation Results - "
             f"Epoch: {e.state.epoch}  "
@@ -113,7 +117,7 @@ if __name__ == '__main__':
         logger.add_scalars('Eval: val set', metrics, e.state.epoch)
 
 
-    @evaluator.on(Events.COMPLETED)
+    @evaluator_val.on(Events.COMPLETED)
     def lr_scheduler_step(e: Engine):
         lr_scheduler.step(e.state.metrics['criterion'])
 
@@ -130,11 +134,11 @@ if __name__ == '__main__':
             n_saved=20,
             global_step_transform=lambda *_: trainer.state.epoch)
     )
-    evaluator.add_event_handler(
+    evaluator_val.add_event_handler(
         Events.COMPLETED,
         EarlyStopping(10, lambda engine: -engine.state.metrics['criterion'], trainer)
     )
-    evaluator.add_event_handler(
+    evaluator_val.add_event_handler(
         Events.COMPLETED,
         Checkpoint({
             'model': model
