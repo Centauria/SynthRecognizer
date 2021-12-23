@@ -76,6 +76,12 @@ class SynthSetClassify(SynthSet):
         }
         return x, y
 
+    def retrieve(self, result):
+        y_args = result['y_args'][0].detach().cpu().numpy().tolist()
+        y_kind = torch.argmax(result['y_kind'], dim=-1)[0].detach().cpu().numpy().tolist()
+        r = y_args[:5] + [y_kind + 1] + y_args[5:]
+        return dict(zip(self.info.keys(), r))
+
 
 class SynthSetLPSClassify(SynthSetClassify):
     def __init__(self, dataset_folder=None):
