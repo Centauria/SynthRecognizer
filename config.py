@@ -38,7 +38,8 @@ class Config(Object):
                 else:
                     self[k] = v
         for k, v in kwargs.items():
-            self[k] = v
+            if v is not None:
+                self[k] = v
     
     def __repr__(self):
         return json.dumps(self, indent=2)
