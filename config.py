@@ -8,16 +8,16 @@ import yaml
 
 class Object(dict):
     """Makes a dict behave like an object, with attribute-style access."""
-    
+
     def __getattr__(self, item):
         try:
             return self[item]
         except KeyError:
             return None
-    
+
     def __setattr__(self, key, value):
         self[key] = value
-    
+
     def __copy__(self):
         return Object(super(Object, self))
 
@@ -40,13 +40,13 @@ class Config(Object):
         for k, v in kwargs.items():
             if v is not None:
                 self[k] = v
-    
+
     def __repr__(self):
         return json.dumps(self, indent=2)
-    
+
     def __copy__(self):
         return Config(**super(Config, self))
-    
+
     def __setitem__(self, key, value):
         keys = key.split('.')
         d = self
@@ -106,7 +106,7 @@ def get_criterion(conf: Config):
     v = vars(importlib.import_module('engine.loss'))
     criterions = {k: v[c]() for k, c in conf['criterion'].items()}
     loss_weights = conf.loss_weight
-    
+
     def criterion(outputs, targets, weights=loss_weights):
         if weights is None:
             weights = {k: 1.0 for k in criterions.keys()}
@@ -115,7 +115,7 @@ def get_criterion(conf: Config):
             for w, c, o, t in zip(weights, criterions, outputs, targets)
         ])
         return loss
-    
+
     return criterion
 
 
