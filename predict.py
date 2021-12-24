@@ -12,6 +12,7 @@ if __name__ == '__main__':
     parser.add_argument('-c', '--config', type=str, required=False)
     parser.add_argument('-m', '--model', type=str, required=False)
     parser.add_argument('-p', '--model-path', type=str, required=True)
+    parser.add_argument('-t', '--dataset', type=str, required=False)
     parser.add_argument('-d', '--dataset-dir', type=str, required=True, help='only to describe output form')
     parser.add_argument('-o', '--output', type=str, required=True)
     parser.add_argument('files', type=str, nargs='+')
