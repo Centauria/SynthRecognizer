@@ -53,6 +53,12 @@ class SynthSetLPS(SynthSet):
 
 
 class SynthSetHybrid(SynthSetLPS):
+    def get(self, wav_path):
+        x = super(SynthSetLPS, self).get(wav_path)
+        s = self.spec(x.mean(dim=0, keepdim=True))
+        s = self.a_d(s)
+        return x, s
+
     def __getitem__(self, item):
         x, y = super(SynthSetLPS, self).__getitem__(item)
         s = self.spec(x.mean(dim=0, keepdim=True))
@@ -111,6 +117,13 @@ class SynthSetLPSMiniClassify(SynthSetLPSClassify):
 
 
 class SynthSetHybridClassify(SynthSetLPSClassify):
+    def get(self, wav_path):
+        x = super(SynthSetLPSClassify, self).get(wav_path)
+        s = self.spec(x.mean(dim=0, keepdim=True))
+        s = self.a_d(s)
+        s = s.transpose(1, 2)
+        return x, s
+
     def __getitem__(self, item):
         x, y = super(SynthSetLPSClassify, self).__getitem__(item)
         s = self.spec(x.mean(dim=0, keepdim=True))
