@@ -125,8 +125,6 @@ class SynthSetHybridClassify(SynthSetLPSClassify):
         return x, s
 
     def __getitem__(self, item):
-        x, y = super(SynthSetLPSClassify, self).__getitem__(item)
-        s = self.spec(x.mean(dim=0, keepdim=True))
-        s = self.a_d(s)
-        s = s.transpose(1, 2)
+        # Here for what reason `super(Father, self).__getitem__()` called OVERWRITTEN `self.get()`
+        (x, s), y = super(SynthSetLPSClassify, self).__getitem__(item)
         return (x, s), y
